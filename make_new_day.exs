@@ -1,4 +1,21 @@
+Mix.install([:tesla])
+
+defmodule AoCClient do
+  use Tesla
+
+  plug(Tesla.Middleware.BaseUrl, "https://adventofcode.com")
+
+  plug(Tesla.Middleware.Headers, [
+    {"user-agent", "tesla"},
+    {"cookie",
+     "session=53616c7465645f5fa031e86ff197ee2b0e53dff66d5658a0189140d543aab050870ca0de8ee612342bf2edca610d4acdb46876be5cc05b29e17ed756599211e4"}
+  ])
+end
+
+
+
 defmodule AOC_Day_Prep_Script do
+  use Tesla
   @lib_template_file "advent_of_code_XX.ex"
   @test_template_file "advent_of_code_XX_test.exs"
   @data_file "XX.csv"
@@ -8,19 +25,23 @@ defmodule AOC_Day_Prep_Script do
 
   def prepare_new_day() do
     day = get_new_day()
-    create_new_day(day)
+    IO.inspect(day)
+    # create_new_day(day)
+    fetch_day_input(day)
   end
 
   def get_new_day() do
-    ls = File.ls!()
-         |> Enum.filter(fn f -> String.contains?(f, ".csv") end)
-         |> Enum.sort()
-    newest_file_name=List.last(ls)
-    current_day_name = String.replace(newest_file_name,".csv","")
-    {current_day, _} = Integer.parse(current_day_name)
-    new_day = current_day + 1
-    new_day_name = Integer.to_string(new_day)
-                   |> String.pad_leading(2, "0")
+    File.ls!()
+    |> Enum.filter(fn f -> String.contains?(f, ".csv") end)
+    |> Enum.sort()
+    |> List.last()
+    |> String.replace(".csv", "")
+    |> Integer.parse()
+    |> case do
+      {current_day, _} -> current_day + 1
+    end
+    |> Integer.to_string()
+    |> String.pad_leading(2, "0")
   end
 
   def create_new_day(day) do
@@ -61,6 +82,14 @@ defmodule AOC_Day_Prep_Script do
       |> String.replace("XX", day)
 
     File.write!(test_path, test_content)
+  end
+
+  def fetch_day_input(day) do
+    {day_int, _} = Integer.parse(day)
+
+    {:ok, %Tesla.Env{body: body}}=AoCClient.get("/2023/day/#{day_int}/input")
+
+    File.write("#{day}.csv", body)
   end
 end
 

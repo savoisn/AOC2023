@@ -23,11 +23,10 @@ defmodule AvdentOfCode01 do
 
   def get_first_digit(line) do
     r = String.graphemes(line)
-    toto = Enum.reduce_while(r, 0, fn g, _ -> is_only_num(g) end)
+    Enum.reduce_while(r, 0, fn g, _ -> is_only_num(g) end)
   end
 
   def is_only_num(string) do
-    r =
       case Integer.parse(string) do
         :error -> {:cont, 0}
         i -> {:halt, elem(i, 0)}
@@ -61,8 +60,8 @@ defmodule AvdentOfCode01 do
     Enum.reduce(entry, 0, fn e, acc ->
       arr =
         Enum.reduce(items, [], fn item, acc2 ->
-          res = :binary.matches(e, item)
-          el = res |> Enum.map(fn t -> {elem(t,0), item} end)
+          el = :binary.matches(e, item)
+               |> Enum.map(fn t -> {elem(t, 0), item} end)
           acc2 ++ el
         end)
 

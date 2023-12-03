@@ -1,3 +1,4 @@
+
 defmodule AvdentOfCode01Test do
   use ExUnit.Case
 
@@ -16,7 +17,6 @@ defmodule AvdentOfCode01Test do
     "4nineeightseven2",
     "zoneight234",
     "7pqrstsixteen",
-    "3369eightnine89"
   ]
 
   test "first star answer" do

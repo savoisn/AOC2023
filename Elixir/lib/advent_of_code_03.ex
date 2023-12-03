@@ -1,5 +1,5 @@
-defmodule AvdentOfCodeXX do
-  @input "../XX.csv"
+defmodule AvdentOfCode03 do
+  @input "../03.csv"
 
   def read_file do
     File.stream!(@input)
