@@ -27,10 +27,10 @@ defmodule AvdentOfCode01 do
   end
 
   def is_only_num(string) do
-      case Integer.parse(string) do
-        :error -> {:cont, 0}
-        i -> {:halt, elem(i, 0)}
-      end
+    case Integer.parse(string) do
+      :error -> {:cont, 0}
+      i -> {:halt, elem(i, 0)}
+    end
   end
 
   def process_second_star(entry) do
@@ -60,8 +60,10 @@ defmodule AvdentOfCode01 do
     Enum.reduce(entry, 0, fn e, acc ->
       arr =
         Enum.reduce(items, [], fn item, acc2 ->
-          el = :binary.matches(e, item)
-               |> Enum.map(fn t -> {elem(t, 0), item} end)
+          el =
+            :binary.matches(e, item)
+            |> Enum.map(fn t -> {elem(t, 0), item} end)
+
           acc2 ++ el
         end)
 
